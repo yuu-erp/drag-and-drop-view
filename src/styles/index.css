@@ -1,0 +1,113 @@
+@import "./_reset.css";
+
+:root {
+  --bg-main-theme-poor: rgb(255 255 255 / 0.5);
+  --bg-main-theme-strong: rgb(255 255 255 / 0.2);
+}
+
+[data-theme="light"] {
+  --bg-main-theme-poor: rgb(255 255 255 / 0.5);
+  --bg-main-theme-strong: rgb(255 255 255 / 0.2);
+}
+
+[data-theme="dark"] {
+  --bg-main-theme-poor: rgb(0 0 0 / 0.5);
+  --bg-main-theme-strong: rgb(0 0 0 / 0.2);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* font-smoothing: antialiased; */
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+html,
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #242424;
+  color: white;
+  position: relative;
+  height: 100vh;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+.background-app-performance-poor {
+  background-color: var(--bg-main-theme-poor);
+  backdrop-filter: blur(24px);
+}
+.background-app-performance-strong {
+  background-color: var(--bg-main-theme-strong);
+  backdrop-filter: blur(15px);
+}
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  z-index: 10;
+}
+.main-grid {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-grid .main-grid_background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pagination {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  z-index: 10;
+}
+.dock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  z-index: 10;
+}
+.dock .dock_container {
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
