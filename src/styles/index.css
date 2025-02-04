@@ -18,7 +18,6 @@
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* font-smoothing: antialiased; */
   text-rendering: optimizeLegibility;
   box-sizing: border-box;
   appearance: none;
@@ -38,6 +37,10 @@ body {
   color: white;
   position: relative;
   height: 100vh;
+  background-image: url("https://i.pinimg.com/736x/f2/28/ff/f228ff9d866c8fbed72c8fa50eb9ce79.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
 }
 
 #app {
@@ -47,14 +50,17 @@ body {
   position: relative;
   overflow: hidden;
 }
+
 .background-app-performance-poor {
   background-color: var(--bg-main-theme-poor);
   backdrop-filter: blur(24px);
 }
+
 .background-app-performance-strong {
   background-color: var(--bg-main-theme-strong);
   backdrop-filter: blur(15px);
 }
+
 .status-bar {
   position: absolute;
   top: 0;
@@ -66,22 +72,14 @@ body {
   border: 1px solid white;
   z-index: 10;
 }
+
 .main-grid {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.main-grid .main-grid_background {
   width: 100%;
   height: 100%;
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  overflow: hidden;
+  z-index: 10;
 }
 
 .pagination {
@@ -110,4 +108,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 15px;
+}
+
+.dapp {
+  width: 60px;
+  height: 60px;
+  background: #242424;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
 }

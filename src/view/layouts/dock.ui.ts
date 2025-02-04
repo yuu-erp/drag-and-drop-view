@@ -26,8 +26,13 @@ export class DockUI implements LayoutUIRepository {
       this.layoutCalculation.getAllVariable();
 
     const element = document.createElement("div");
-    element.textContent = "Dock container";
     element.className = "background-app-performance-poor dock_container";
+    [1, 2, 3, 4].forEach((dapp) => {
+      const dappElement = document.createElement("div");
+      dappElement.className = "dapp";
+      dappElement.textContent = `${dapp}`;
+      element.appendChild(dappElement);
+    });
     styleElement(element.style, {
       height: heightDockContainer + "px",
       width: dockWidth + "px",

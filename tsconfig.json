@@ -23,6 +23,8 @@
 
     "baseUrl": ".",
     "paths": {
+      "@core/application": ["./src/core/application"],
+      "@core/application/*": ["./src/core/application/*"],
       "@core/infrastructure": ["./src/core/infrastructure"],
       "@core/infrastructure/*": ["./src/core/infrastructure/*"],
       "@core/layout": ["./src/core/layout"],
@@ -32,7 +34,9 @@
       "@core/container": ["./src/core/container"],
       "@core/container/*": ["./src/core/container/*"],
       "@core/helpers": ["./src/core/helpers"],
-      "@core/helpers/*": ["./src/core/helpers/*"]
+      "@core/helpers/*": ["./src/core/helpers/*"],
+      "@core/exceptions": ["./src/core/exceptions"],
+      "@core/exceptions/*": ["./src/core/exceptions/*"]
     }
   },
   "include": ["src"]

@@ -5,7 +5,6 @@ import {
   CHECKPOINT_COLUMN,
   CHECKPOINT_COLUMN_DOCK,
   CHECKPOINT_DEVICE,
-  Device,
   HEIGHT_DOCK,
   HEIGHT_DOCK_CONTAINER,
   HEIGHT_PAGINATION,
@@ -13,7 +12,7 @@ import {
   SIZE_ICON,
 } from "./constants";
 import { LayoutCalculationRepository } from "./layout-calculation.repository";
-import { ILayoutCalculation } from "./layout-calculation.type";
+import { Device, ILayoutCalculation } from "./layout-calculation.type";
 
 @injectable()
 export class LayoutCalculation implements LayoutCalculationRepository {
@@ -23,18 +22,7 @@ export class LayoutCalculation implements LayoutCalculationRepository {
   ) {}
 
   public init(): void {
-    const payload = {
-      heightStatusBar: this.heightStatusBar(),
-      heightPagination: this.heightPagination(),
-      heightDock: this.heightDock(),
-      heightDockContainer: this.heightDockContainer(),
-      sizeIcon: this.sizeIcon(),
-      columnNumber: this.columnNumber(),
-      rowsNumber: this.rowsNumber(),
-      dockWidth: this.dockWidth(),
-      screenCheckPoint: this.screenCheckPoint(),
-      ...this.calculateGridDimensions(),
-    };
+    const payload = this.calculateLayout();
     this.storage.set("layout-calculation", payload);
   }
 
@@ -49,69 +37,97 @@ export class LayoutCalculation implements LayoutCalculationRepository {
     return useResponsiveValue(CHECKPOINT_DEVICE, Device.MOBILE); // giá trị mặt định là của mobile
   }
 
-  private heightStatusBar(): number {
-    return useResponsiveValue(HEIGHT_STATUS_BAR, 60); // giá trị mặt định là của mobile
-  }
-  private heightPagination(): number {
-    return useResponsiveValue(HEIGHT_PAGINATION, 40); // giá trị mặt định là của mobile
-  }
-  private heightDock(): number {
-    return useResponsiveValue(HEIGHT_DOCK, 120); // giá trị mặt định là của mobile
-  }
-  private heightDockContainer(): number {
-    return useResponsiveValue(HEIGHT_DOCK_CONTAINER, 96); // giá trị mặt định là của mobile
+  private calculateLayout(): ILayoutCalculation {
+    const screenCheckPoint =
+      this.device() === Device.MOBILE ? innerWidth : innerWidth * 0.7;
+    const heightStatusBar = useResponsiveValue(HEIGHT_STATUS_BAR, 60);
+    const heightPagination = useResponsiveValue(HEIGHT_PAGINATION, 40);
+    const heightDock = useResponsiveValue(HEIGHT_DOCK, 120);
+    const heightDockContainer = useResponsiveValue(HEIGHT_DOCK_CONTAINER, 96);
+    const sizeIcon = useResponsiveValue(SIZE_ICON, 60);
+    const columnNumber = useResponsiveValue(CHECKPOINT_COLUMN, 4);
+    const columnDockNumber = useResponsiveValue(CHECKPOINT_COLUMN_DOCK, 4);
+
+    const { itemWidth, outerPadding } = this.calculateGridDimensions(
+      screenCheckPoint,
+      columnNumber
+    );
+    const itemHeight = this.calculateItemHeight(itemWidth);
+    const rowsNumber = this.calculateRowsNumber(
+      heightStatusBar,
+      heightPagination,
+      heightDock,
+      itemHeight
+    );
+
+    const dockWidth = this.calculateDockWidth(
+      sizeIcon,
+      outerPadding,
+      columnDockNumber
+    );
+
+    return {
+      screenCheckPoint,
+
+      heightStatusBar,
+      heightPagination,
+      heightDock,
+      heightDockContainer,
+
+      sizeIcon,
+
+      columnNumber,
+      rowsNumber,
+      itemWidth,
+      itemHeight,
+      outerPadding,
+
+      dockWidth,
+
+      device: this.device(),
+    };
   }
 
-  private columnDockNumber(): number {
-    return useResponsiveValue(CHECKPOINT_COLUMN_DOCK, 4); // giá trị mặt định là của mobile
-  }
-
-  private dockWidth(): number {
-    const { outerPadding } = this.calculateGridDimensions();
-    return this.device() === Device.MOBILE
-      ? innerWidth - outerPadding * 2
-      : this.columnDockNumber() * this.sizeIcon() +
-          this.columnDockNumber() * outerPadding +
-          outerPadding;
-  }
-
-  private itemHeight(): number {
-    const { itemWidth } = this.calculateGridDimensions();
+  private calculateItemHeight(itemWidth: number): number {
     return itemWidth * 1.1;
   }
-  private columnNumber(): number {
-    return useResponsiveValue(CHECKPOINT_COLUMN, 4); // giá trị mặt định là của mobile
-  }
 
-  private rowsNumber(): number {
+  private calculateRowsNumber(
+    heightStatusBar: number,
+    heightPagination: number,
+    heightDock: number,
+    itemHeight: number
+  ): number {
     return Math.floor(
-      (innerHeight -
-        this.heightStatusBar() -
-        this.heightPagination() -
-        this.heightDock()) /
-        this.itemHeight()
+      (innerHeight - heightStatusBar - heightPagination - heightDock) /
+        itemHeight
     );
   }
 
-  private sizeIcon(): number {
-    return useResponsiveValue(SIZE_ICON, 60); // giá trị mặt định là của mobile
+  private calculateDockWidth(
+    sizeIcon: number,
+    outerPadding: number,
+    columnDockNumber: number
+  ): number {
+    return this.device() === Device.MOBILE
+      ? innerWidth - outerPadding * 2
+      : columnDockNumber * sizeIcon +
+          columnDockNumber * outerPadding +
+          outerPadding;
   }
 
-  private screenCheckPoint(): number {
-    return innerWidth * 0.6;
-  }
-
-  private calculateGridDimensions(): {
+  private calculateGridDimensions(
+    screenCheckPoint: number,
+    columnNumber: number
+  ): {
     itemWidth: number;
     outerPadding: number;
   } {
     const factor = 20;
-    const outerPadding =
-      this.screenCheckPoint() / (this.columnNumber() * factor);
+    const outerPadding = screenCheckPoint / (columnNumber * factor);
     const gridGap = outerPadding;
-    const totalPadding = 2 * outerPadding + (this.columnNumber() - 1) * gridGap;
-    const itemWidth =
-      (this.screenCheckPoint() - totalPadding) / this.columnNumber();
+    const totalPadding = 2 * outerPadding + (columnNumber - 1) * gridGap;
+    const itemWidth = (screenCheckPoint - totalPadding) / columnNumber;
     return {
       itemWidth,
       outerPadding: totalPadding / 2,

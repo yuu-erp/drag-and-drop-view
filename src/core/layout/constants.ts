@@ -1,8 +1,4 @@
-export enum Device {
-  MOBILE = "MOBILE",
-  TABLET = "TABLET",
-  DESKTOP = "DESKTOP",
-}
+import { Device } from "./layout-calculation.type";
 
 export const CHECKPOINT_DEVICE: Record<number, Device> = {
   768: Device.TABLET,
@@ -39,10 +35,10 @@ export const HEIGHT_PAGINATION: Record<number, number> = {
 
 export const HEIGHT_DOCK: Record<number, number> = {
   768: 120,
-  1024: 120,
+  1024: 100,
 };
 
 export const HEIGHT_DOCK_CONTAINER: Record<number, number> = {
   768: 96,
-  1024: 96,
+  1024: 76,
 };
